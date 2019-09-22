@@ -27,6 +27,11 @@ extension VFill: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: RootKeys.self)
+        if !container.contains(.vFill) {
+            let context = DecodingError.Context(codingPath: [RootKeys.vFill],
+                                                debugDescription: "Could not find key \(RootKeys.vFill)")
+            throw DecodingError.keyNotFound(RootKeys.vFill, context)
+        }
         if let floatValue = try? container.decode(Float.self, forKey: .vFill) {
             self.insets = LXEdgeInsets(top: CGFloat(floatValue),
                                        left: 0.0,

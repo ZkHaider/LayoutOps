@@ -27,6 +27,11 @@ extension HFill: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: RootKeys.self)
+        if !container.contains(.hFill) {
+                   let context = DecodingError.Context(codingPath: [RootKeys.hFill],
+                                                       debugDescription: "Could not find key \(RootKeys.hFill)")
+                   throw DecodingError.keyNotFound(RootKeys.hFill, context)
+               }
         if let floatValue = try? container.decode(Float.self, forKey: .hFill) {
             self.insets = LXEdgeInsets(top: 0.0,
                                        left: CGFloat(floatValue),

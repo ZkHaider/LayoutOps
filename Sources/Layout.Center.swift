@@ -33,6 +33,11 @@ extension Center: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: RootKeys.self)
+        if !container.contains(.center) {
+            let context = DecodingError.Context(codingPath: [RootKeys.center],
+                                                debugDescription: "Could not find key \(RootKeys.center)")
+            throw DecodingError.keyNotFound(RootKeys.center, context)
+        }
         self.insets = try container.decode(LXEdgeInsets.self, forKey: .center)
     }
     

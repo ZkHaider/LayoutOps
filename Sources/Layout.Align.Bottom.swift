@@ -27,6 +27,11 @@ extension AlignBottom: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: RootKeys.self)
+        if !container.contains(.alignBottom) {
+            let context = DecodingError.Context(codingPath: [RootKeys.alignBottom],
+                                                debugDescription: "Could not find key \(RootKeys.alignBottom)")
+            throw DecodingError.keyNotFound(RootKeys.alignBottom, context)
+        } 
         let floatValue = try container.decode(Float.self, forKey: .alignBottom)
         self.insets = LXEdgeInsets(top: 0.0,
                                    left: 0.0,

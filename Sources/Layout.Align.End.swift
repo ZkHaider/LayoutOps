@@ -27,6 +27,11 @@ extension AlignEnd: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: RootKeys.self)
+        if !container.contains(.alignEnd) {
+            let context = DecodingError.Context(codingPath: [RootKeys.alignEnd],
+                                                debugDescription: "Could not find key \(RootKeys.alignEnd)")
+            throw DecodingError.keyNotFound(RootKeys.alignEnd, context)
+        }
         let floatValue = try container.decode(Float.self, forKey: .alignEnd)
         self.insets = LXEdgeInsets(top: 0.0,
                                    left: 0.0,

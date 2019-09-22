@@ -27,6 +27,11 @@ extension AlignStart: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: RootKeys.self)
+        if !container.contains(.alignStart) {
+            let context = DecodingError.Context(codingPath: [RootKeys.alignStart],
+                                                debugDescription: "Could not find key \(RootKeys.alignStart)")
+            throw DecodingError.keyNotFound(RootKeys.alignStart, context)
+        }
         let floatValue = try container.decode(Float.self, forKey: .alignStart)
         self.insets = LXEdgeInsets(top: 0.0,
                                    left: CGFloat(floatValue),

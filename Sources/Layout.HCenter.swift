@@ -27,6 +27,11 @@ extension HCenter: Codable {
     
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: RootKeys.self)
+        if !container.contains(.hCenter) {
+            let context = DecodingError.Context(codingPath: [RootKeys.hCenter],
+                                                debugDescription: "Could not find key \(RootKeys.hCenter)")
+            throw DecodingError.keyNotFound(RootKeys.hCenter, context)
+        }
         if let floatValue = try? container.decode(Float.self, forKey: .hCenter) {
             self.insets = LXEdgeInsets(top: 0.0,
                                        left: CGFloat(floatValue),
