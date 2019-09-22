@@ -40,12 +40,20 @@ extension Layouting where Base: Layoutable {
     public func center(insets: NSEdgeInsets = NSEdgeInsets()) -> Layouting<Base> {
         return center(insets: LXEdgeInsets(top: insets.top, left: insets.left, bottom: insets.bottom, right: insets.right))
     }
+    
     #else
     @discardableResult
     public func center(insets: UIEdgeInsets = UIEdgeInsets()) -> Layouting<Base> {
         return center(insets: LXEdgeInsets(top: insets.top, left: insets.left, bottom: insets.bottom, right: insets.right))
     }
+    
     #endif
+    
+    @discardableResult
+    public func center(_ center: Center) -> Layouting<Base> {
+        let insets: LXEdgeInsets = center.insets
+        return self.center(insets: insets)
+    }
     
     func center(insets: LXEdgeInsets = LXEdgeInsets()) -> Layouting<Base> {
         return processInParent { frame, superviewFrame in
@@ -62,6 +70,13 @@ extension Layouting where Base: Layoutable {
     }
     
     @discardableResult
+    public func hCenter(_ hCenter: HCenter) -> Layouting<Base> {
+        let insets: LXEdgeInsets = hCenter.insets
+        return self.hcenter(leftInset: insets.left,
+                            rightInset: insets.right)
+    }
+    
+    @discardableResult
     public func hcenter(leftInset: CGFloat = 0, rightInset: CGFloat = 0) -> Layouting<Base> {
         return processInParent { frame, superviewFrame in
             return CGRect(x: centerStart(frame.width, superValue: superviewFrame.width, start: leftInset, finish: rightInset),
@@ -69,6 +84,13 @@ extension Layouting where Base: Layoutable {
                           width: frame.size.width,
                           height: frame.size.height)
         }
+    }
+    
+    @discardableResult
+    public func vCenter(_ vCenter: VCenter) -> Layouting<Base> {
+        let insets: LXEdgeInsets = vCenter.insets
+        return self.vcenter(topInset: insets.top,
+                            bottomInset: insets.bottom)
     }
     
     @discardableResult
@@ -94,6 +116,12 @@ extension Layouting where Base: Layoutable {
     }
     #endif
     
+    @discardableResult
+    public func fill(_ fill: Fill) -> Layouting<Base> {
+        let insets: LXEdgeInsets = fill.insets
+        return self.fill(insets: insets)
+    }
+    
     func fill(insets: LXEdgeInsets) -> Layouting<Base> {
         return processInParent { frame, superviewFrame in
             return LXEdgeInsetsInsetRect(superviewFrame, insets)
@@ -108,6 +136,13 @@ extension Layouting where Base: Layoutable {
     @discardableResult
     public func fill(top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat) -> Layouting<Base> {
         return fill(insets: LXEdgeInsets(top: top, left: left, bottom: bottom, right: right))
+    }
+    
+    @discardableResult
+    public func hFill(_ hFill: HFill) -> Layouting<Base> {
+        let insets: LXEdgeInsets = hFill.insets
+        return self.hfill(leftInset: insets.left,
+                          rightInset: insets.right)
     }
     
     @discardableResult
@@ -126,6 +161,13 @@ extension Layouting where Base: Layoutable {
     }
     
     @discardableResult
+    public func vFill(_ vFill: VFill) -> Layouting<Base> {
+        let insets: LXEdgeInsets = vFill.insets
+        return self.vfill(topInset: insets.top,
+                          bottomInset: insets.bottom)
+    }
+    
+    @discardableResult
     public func vfill(topInset: CGFloat, bottomInset: CGFloat) -> Layouting<Base> {
         return processInParent { frame, superviewFrame in
             return CGRect(x: frame.origin.x,
@@ -141,6 +183,12 @@ extension Layouting where Base: Layoutable {
     }
     
     @discardableResult
+    public func alignTop(_ alignTop: AlignTop) -> Layouting<Base> {
+        let insets: LXEdgeInsets = alignTop.insets
+        return self.alignTop(insets.top)
+    }
+    
+    @discardableResult
     public func alignTop(_ inset: CGFloat = 0) -> Layouting<Base> {
         return processInParent { frame, superviewFrame in
             return CGRect(x: frame.origin.x,
@@ -148,6 +196,12 @@ extension Layouting where Base: Layoutable {
                           width: frame.width,
                           height: frame.height)
         }
+    }
+    
+    @discardableResult
+    public func alignStart(_ alignStart: AlignStart) -> Layouting<Base> {
+        let insets: LXEdgeInsets = alignStart.insets
+        return self.alignLeft(insets.left)
     }
     
     @discardableResult
@@ -161,12 +215,24 @@ extension Layouting where Base: Layoutable {
     }
     
     @discardableResult
+    public func alignBottom(_ alignBottom: AlignBottom) -> Layouting<Base> {
+        let insets: LXEdgeInsets = alignBottom.insets
+        return self.alignBottom(insets.bottom)
+    }
+    
+    @discardableResult
     public func alignBottom(_ inset: CGFloat = 0) -> Layouting<Base> {
         return processInParent { frame, superviewFrame in
             return CGRect(x: frame.origin.x,
                           y: superviewFrame.height - frame.height - inset,
                           width: frame.width, height: frame.height)
         }
+    }
+    
+    @discardableResult
+    public func alignEnd(_ alignEnd: AlignEnd) -> Layouting<Base> {
+        let insets: LXEdgeInsets = alignEnd.insets
+        return self.alignRight(insets.right)
     }
     
     @discardableResult
