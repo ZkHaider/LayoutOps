@@ -321,6 +321,74 @@ struct LXEdgeInsets {
         self.bottom = bottom
         self.right = right
     }
+    
+    var congruent: Bool {
+        return self.top == self.bottom && self.left == self.right && self.top == self.left
+    }
+}
+
+extension LXEdgeInsets: Codable {
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let floatValue = try? container.decode(Float.self) {
+            self.top = CGFloat(floatValue)
+            self.left = CGFloat(floatValue)
+            self.right = CGFloat(floatValue)
+            self.bottom = CGFloat(floatValue)
+        } else if let arrayValue = try? container.decode([Float].self),
+            arrayValue.count >= 4 {
+            self.left = CGFloat(arrayValue[0])
+            self.top = CGFloat(arrayValue[1])
+            self.right = CGFloat(arrayValue[2])
+            self.bottom = CGFloat(arrayValue[3])
+        } else {
+            self.top = 0.0
+            self.left = 0.0
+            self.bottom = 0.0
+            self.right = 0.0
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        if self.congruent {
+            try container.encode(self.top)
+        } else {
+            let array: [Float] = [Float(left), Float(top), Float(right), Float(bottom)]
+            try container.encode(array)
+        }
+    }
+    
+}
+
+extension LXEdgeInsets: Hashable {
+    
+    public static func ==(lhs: LXEdgeInsets,
+                          rhs: LXEdgeInsets) -> Bool {
+        if lhs.top != rhs.top {
+            return false
+        }
+        if lhs.left != rhs.left {
+            return false
+        }
+        if lhs.right != rhs.right {
+            return false
+        }
+        if lhs.bottom != rhs.bottom {
+            return false
+        }
+        return true
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        if self.congruent {
+            hasher.combine(self.top)
+        } else {
+            hasher.combine(self.left + self.top + self.right + self.bottom)
+        }
+    }
+    
 }
 
 func LXEdgeInsetsInsetRect(_ r: CGRect, _ insets: LXEdgeInsets) -> CGRect {
