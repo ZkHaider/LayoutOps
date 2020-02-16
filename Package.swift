@@ -3,15 +3,32 @@
 
 import PackageDescription
 
-let package = Package(name: "LayoutOps",
-                      platforms: [.macOS(.v10_10),
-                                  .iOS(.v8),
-                                  .tvOS(.v9)],
-                      products: [.library(name: "LayoutOps",
-                                          targets: ["LayoutOps"])],
-                      targets: [.target(name: "LayoutOps",
-                                        path: "Sources"),
-                                .testTarget(
-                                    name: "LayoutOpsTests",
-                                    dependencies: ["LayoutOps"]),],
-                      swiftLanguageVersions: [.v5])
+let package = Package(
+    name: "LayoutOps",
+    platforms: [
+        .macOS(.v10_10),
+        .iOS(.v8),
+        .tvOS(.v9)],
+    products: [
+        .library(
+            name: "LayoutOps",
+            targets: ["LayoutOps"]
+        )
+    ],
+    targets: [
+        .target(
+            name: "LayoutOps",
+            path: "Sources"
+        ),
+        .testTarget(
+            name: "LayoutOpsTests",
+            dependencies: ["LayoutOps"]
+        ),
+        .target(
+            name: "LayoutOps-Universal",
+            dependencies: ["LayoutOps"],
+            path: "LayoutOps-Universal"
+        )
+    ],
+    swiftLanguageVersions: [.v5]
+)
