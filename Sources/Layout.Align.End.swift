@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 public struct AlignEnd {
     let insets: LXEdgeInsets
